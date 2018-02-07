@@ -30,7 +30,7 @@ botHandlers.processRequest = function(req, res){
 				reject(err);
 			})
 		}
-		if(action == 'tractIntent'){
+		if(action == 'trackYesIntent'){
 			trackIncident(inputContexts[0].parameters.incidentNumber)
 			.then(function(resp){
 				resolve(resp);
