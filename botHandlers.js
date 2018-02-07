@@ -14,7 +14,7 @@ botHandlers.processRequest = function(req, res){
 		var sessionId = (req.body.sessionId)?req.body.sessionId:'';		
 		var botResponses = require('./'+requestSource.toLowerCase());		
 		
-		//const googleAssistantRequest = 'google'; // Constant to identify Google Assistant requests		
+		/*//const googleAssistantRequest = 'google'; // Constant to identify Google Assistant requests		
 		//const app = new DialogflowApp({request: req, response: res});
 		console.log(sessionId);
 		//consoe.log(req.session);
@@ -51,7 +51,7 @@ botHandlers.processRequest = function(req, res){
 		})
 		.catch(function(err){
 			reject(err);
-		})	
+		})	*/
 		
 			
 	});
