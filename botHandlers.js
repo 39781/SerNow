@@ -31,7 +31,7 @@ botHandlers.processRequest = function(req, res){
 			})
 		}
 		if(action == 'trackYesIntent'){
-			trackIncident(inputContexts[0].parameters.incidentNumber)
+			trackIncident(inputContexts[0].parameters.incidentNum)
 			.then(function(resp){
 				resolve(resp);
 			})
@@ -127,7 +127,8 @@ function createIncident(incident){
 }
 function trackIncident(incNum){
 	return new Promise(function(resolve,reject){
-		console.log('tracking started');		
+		console.log('tracking started',incNum);	
+		
 		var fstr = incNum.substring(0,3);
 		var sstr = incNum.substring(3);
 		var rsp = {  
@@ -138,14 +139,14 @@ function trackIncident(incNum){
 							"text":	""
 						}
 					}
-				}
-				console.log(fstr == 'inc'&&!isNaN(sstr));
-		if(fstr == 'inc'&&!isNaN(sstr)){
+				}		
+		console.log(fstr.toLowerCase() == 'inc'&&!isNaN(sstr));				
+		if(fstr.toLowerCase() == 'inc'&&!isNaN(sstr)){
 			var options = { 
 				method: 'GET',
 				url: 'https://dev18442.service-now.com/api/now/v1/table/incident',
 				qs: { 
-					number: incNum.toUpperCase()
+					number: incNum
 				},
 				headers:{
 					'postman-token': '5441f224-d11a-2f78-69cd-51e58e2fbdb6',
@@ -168,7 +169,15 @@ function trackIncident(incNum){
 				resolve(rsp);
 			});			
 		}else{
-			rsp.data.facebook.text = "Please enter valid incident number";
+			rsp = {
+				speech:"Please enter valid incident number",
+				displayText: "Please enter valid incident number",
+				followupEvent: {
+					"name": "trackIntent",
+					"data": {
+					}
+				}
+			}			
 			resolve(rsp);
 		}
 		
