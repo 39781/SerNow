@@ -173,7 +173,7 @@ function trackIncident(incNum){
 					"name": "trackIntent",
 					"data": {
 						"facebook":{
-							text : "hello";
+							text : "hello"
 						}
 					}
 				}		
