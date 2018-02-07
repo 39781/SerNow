@@ -12,8 +12,31 @@ botHandlers.processRequest = function(req, res){
 		let actionValue = (req.body.originalRequest.data.message)?req.body.originalRequest.data.message.text:'';				
 		let payloadText = (req.body.originalRequest.data.message.quick_reply)?req.body.originalRequest.data.message.quick_reply.payload:'';		
 		var sessionId = (req.body.sessionId)?req.body.sessionId:'';		
-		var botResponses = require('./'+requestSource.toLowerCase());		
 		
+		if(action == 'yesIntent'){
+			var inObj = {
+				sdec : inputContexts[0].parameters.sdec,
+				caller: inputContexts[0].parameters.caller,
+				contactType : inputContexts[0].parameters.contactType,
+				assignedTo : inputContexts[0].parameters.assignedTo
+			}
+			createIncident(inObj)
+			.then(function(resp){
+				resolve(resp);
+			})
+			.catch((err)=>{
+				reject(err);
+			})
+		}
+		if(action == 'tractIntent'){
+			trackIncident(inputContexts[0].parameters.incidentNumber)
+			.then(function(resp){
+				resolve(resp);
+			})
+			.catch((err)=>{
+				reject(err);
+			})
+		}			
 		/*//const googleAssistantRequest = 'google'; // Constant to identify Google Assistant requests		
 		//const app = new DialogflowApp({request: req, response: res});
 		console.log(sessionId);
@@ -57,7 +80,7 @@ botHandlers.processRequest = function(req, res){
 	});
 }
 
-function createIncident(sessId){
+function createIncident(incident){
 	console.log('creation started',incidentTickets[sessId]);		
 	return new Promise(function(resolve,reject){
 		var options = { 
@@ -70,20 +93,12 @@ function createIncident(sessId){
 				'content-type': 'application/json' 
 			},
 			body:{ 
-				short_description	: 	'testing incident',
+				short_description	: 	incident.sdec,
 				caller_id			: 	'TST',
-				Caller				:	incidentTickets[sessId].caller,
-				urgency				: 	incidentTickets[sessId].urgency,
-				state				:	incidentTickets[sessId].state,
-				incident_state		:	incidentTickets[sessId].incidentState,
-				category			:	incidentTickets[sessId].category,
-				subcategory			:	incidentTickets[sessId].subCategory,
-				//workingGroup		:	incidentTickets[sessId].workingGroup,
-				impact				:	incidentTickets[sessId].impact,
-				priority			:	incidentTickets[sessId].priority,
-				contact_type		:	incidentTickets[sessId].contactType,
+				Caller				:	incident.caller,
+				contact_type		:	incident.contactType,
 				comments			: 	'Chatbot Testing',
-				Assigned_to			:	incidentTickets[sessId].assignedTo		
+				Assigned_to			:	incident.assignedTo		
 			},			
 			json: true 
 		}; 
@@ -108,7 +123,7 @@ function createIncident(sessId){
 		
 	})
 }
-function trackIncident(incNum, sessId){
+function trackIncident(incNum){
 	return new Promise(function(resolve,reject){
 		console.log('tracking started');		
 		var fstr = incNum.substring(0,3);
