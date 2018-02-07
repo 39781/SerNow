@@ -169,13 +169,7 @@ function trackIncident(incNum){
 				resolve(rsp);
 			});			
 		}else{
-			rsp.data.facebook.text = "Please enter valid incident number";			
-			rsp.messages =  [
-				{
-				  "type": 0,
-				  "displayText": "Welcome, Sam!"
-				}
-			]
+			rsp.data.facebook.text = "Please enter valid incident number";						
 			rsp.followupEvent= {
 					"name": "trackIntent",
 					"data": {
