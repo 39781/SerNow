@@ -12,14 +12,16 @@ botHandlers.processRequest = function(req, res){
 		let actionValue = (req.body.originalRequest.data.message)?req.body.originalRequest.data.message.text:'';				
 		let payloadText = (req.body.originalRequest.data.message.quick_reply)?req.body.originalRequest.data.message.quick_reply.payload:'';		
 		var sessionId = (req.body.sessionId)?req.body.sessionId:'';		
-		
+		console.log(action);
 		if(action == 'yesIntent'){
 			var inObj = {
-				sdec : inputContexts[0].parameters.sdec,
-				caller: inputContexts[0].parameters.caller,
-				contactType : inputContexts[0].parameters.contactType,
-				assignedTo : inputContexts[0].parameters.assignedTo
+				sdec 		: 	inputContexts[0].parameters.sdec,
+				caller		: 	inputContexts[0].parameters.caller,
+				contactType : 	inputContexts[0].parameters.contactType,
+				assignedTo 	: 	inputContexts[0].parameters.assignedTo,
+				email		:	inputContexts[0].parameters.email
 			}
+			console.log(inObj);
 			createIncident(inObj)
 			.then(function(resp){
 				resolve(resp);
@@ -81,7 +83,7 @@ botHandlers.processRequest = function(req, res){
 }
 
 function createIncident(incident){
-	console.log('creation started',incidentTickets[sessId]);		
+	console.log('creation started');		
 	return new Promise(function(resolve,reject){
 		var options = { 
 			method: 'POST',
@@ -102,7 +104,7 @@ function createIncident(incident){
 			},			
 			json: true 
 		}; 
-		delete incidentTickets[sessId];		
+		
 		request(options, function (error, response, body) {
 			var rsp = {  
 					"speech":"",
@@ -164,8 +166,7 @@ function trackIncident(incNum){
 					
 				}
 				resolve(rsp);
-			});
-			delete incidentTickets[sessId];
+			});			
 		}else{
 			rsp.data.facebook.text = "Please enter valid incident number";
 			resolve(rsp);
