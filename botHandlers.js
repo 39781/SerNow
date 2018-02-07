@@ -172,6 +172,9 @@ function trackIncident(incNum){
 			rsp.followupEvent= {
 					"name": "trackIntent",
 					"data": {
+						"facebook":{
+							text : "hello";
+						}
 					}
 				}		
 			rsp.data.facebook.text = "Please enter valid incident number";			
