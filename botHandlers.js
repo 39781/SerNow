@@ -172,9 +172,8 @@ function trackIncident(incNum){
 			rsp.data.facebook.text = "Please enter valid incident number";						
 			rsp.followupEvent= {
 					"name": "trackIntent",
+					"displayText":"hari",
 					"data": {
-						"facebook":{						
-						}
 					}
 				}					
 			resolve(rsp);
